@@ -1,38 +1,64 @@
+* {
+  box-sizing: border-box;
+}
 .App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+  width: 100vw;
+  height: 100vh;
   display: flex;
+  justify-content: center;
+  align-items: center;
   flex-direction: column;
+  background: black;
+  padding: 20px;
+}
+
+.arrow-container {
+  max-width: 100vw;
+  min-width: 250px;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 4px;
+  position: relative;
+  background-image: linear-gradient(to right, rgba(255, 255, 255, 0.2) 0%, rgba(0, 0, 0, 0.9) 51%, rgba(255, 255, 255, 0.2) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 500px;
+  padding: 5px 50px;
+}
+.arrow-container h3 {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  min-width: min-content;
+  top: 0;
+  margin: 0;
+  background-image: linear-gradient(to right, rgba(62, 14, 66, 0.7) 0%, rgba(94, 37, 98, 0.9) 51%, rgba(90, 55, 94, 0.7) 100%);
+  color: rgba(255, 255, 255, 1);
+  border: 1px solid #360d36;
+  border-radius: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  white-space: nowrap;
+  padding: 0px 40px;
+}
+
+.arrow {
+  width: 55px;
+  height: 55px;
+  display: flex;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  font-size: 20px;
+  border: 2px solid #0f3c6c;
+  border-radius: 50%;
+  transition: background-image 0.2s ease, transform 0.2s ease;
+  background-position: right center;
+  background-image: linear-gradient(to right, #20568f 0%, #2a5e98 51%, #3a7cc7 100%);
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
 }
 
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.arrow.active {
+  background-image: linear-gradient(to right, #336225 0%, #498035 51%, #649f4e 100%);
+  border: 2px solid #193a11;
 }
