@@ -10,8 +10,30 @@
   flex-direction: column;
   background: black;
   padding: 20px;
+  position: relative;
 }
-
+.App h1 {
+  color: white;
+}
+.App .select-level {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 24px;
+  color: #3a7cc7;
+  font-weight: bold;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+}
+.App .select-level select {
+  padding: 10px;
+  border-radius: 10px;
+  font-size: 24px;
+  color: #0f3c6c;
+  font-weight: bold;
+}
 .arrow-container {
   max-width: 100vw;
   min-width: 250px;

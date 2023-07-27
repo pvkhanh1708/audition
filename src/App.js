@@ -2,8 +2,26 @@ import React, {useEffect, useRef, useState} from 'react';
 import './App.css';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faArrowDown, faArrowLeft, faArrowRight, faArrowUp} from "@fortawesome/free-solid-svg-icons";
+import Flower from "./musics/Flower.mp3";
+import ThichHayLaYeu from "./musics/Thich Hay La Yeu.mp3";
+import ViAnhDauCoBiet from "./musics/Vi Anh Dau Co Biet.mp3";
 
 const ARROW_KEYS = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'];
+const MAX_LEVELS = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
+const MUSICS = [
+	{
+		name: "Flower",
+		src: Flower
+	},
+	{
+		name: "Thích Hay Là Yêu",
+		src: ThichHayLaYeu
+	},
+	{
+		name: "Vì Anh Đâu Có Biết",
+		src: ViAnhDauCoBiet
+	}
+]
 const Arrow = ({number, active, arrow, onClick}) => {
 	return (
 		<div className={`arrow ${active ? 'active' : ''}`} onClick={() => onClick(number)}>
@@ -15,27 +33,48 @@ const Arrow = ({number, active, arrow, onClick}) => {
 	);
 };
 
-function App() {
-	const targetRef = useRef(null);
+export function App() {
+	const [maxLevel, setMaxLevel] = useState(10)
 	const [arrows, setArrows] = useState([]);
 	const [numberArrow, setNumberArrow] = useState(1);
 	const [pressSpace, setPressSpace] = useState(false);
 	const [hack, setHack] = useState(false);
 	const [activeArrow, setActiveArrow] = useState(null);
+	const [music, setMusic] = useState(MUSICS[0].src);
 	
+	const audioRef = useRef(null);
+	useEffect(() => {
+		const handleClick = () => {
+			console.log('loaded')
+			audioRef.current.play().catch((error) => {
+				// Autoplay may be blocked, handle the error or provide a play button.
+				console.log('Auto-play failed:', error);
+			});
+		};
+		
+		// Attach the click event listener to the document body
+		document.body.addEventListener('click', handleClick);
+		
+		return () => {
+			// Remove the click event listener when the component unmounts
+			document.body.removeEventListener('click', handleClick);
+		};
+	}, []);
+	useEffect(() => {
+		if (arrows.length > maxLevel) generateArrows()
+	}, [maxLevel])
 	const generateArrows = () => {
-		const randomArrows = Array.from({length: numberArrow}, (_, index) => ({
+		const randomArrows = Array.from({length: numberArrow <= maxLevel ? numberArrow : 1 }, (_, index) => ({
 			number: index + 1,
 			arrow: ARROW_KEYS[Math.floor(Math.random() * ARROW_KEYS.length)],
 			active: false,
 		}));
-		setNumberArrow(numberArrow + 1 > 100 ? 1 : numberArrow + 1)
+		setNumberArrow(randomArrows.length + 1 > maxLevel ? 1 : randomArrows.length + 1)
 		setArrows(randomArrows);
 	}
 	useEffect(() => {
 		generateArrows();
 	}, []);
-	
 	useEffect(() => {
 		if (checkIfAllActive()) {
 			setPressSpace(true)
@@ -46,13 +85,10 @@ function App() {
 			document.dispatchEvent(new KeyboardEvent('keydown', { key }));
 		};
 		const interval = setInterval(() => {
-			console.log('hack', hack)
 			if (hack && arrows.length) triggerKeyPress(arrows[getLastActiveIndex(arrows) + 1]?.arrow);
 		}, 0);
 		return () => clearInterval(interval);
 	}, [arrows, hack])
-	
-	
 	const checkIfArrowExists = (arrows, arrowPress) => {
 		return arrows.length && arrows.some((arrow) => arrow.arrow === arrowPress)
 	};
@@ -122,9 +158,24 @@ function App() {
 		document.addEventListener('keydown', handleKeyDown);
 		return () => document.removeEventListener('keydown', handleKeyDown);
 	}, [arrows, pressSpace]);
-	
 	return (
 		<div className="App">
+			<audio ref={audioRef}>
+				<source src={MUSICS[Math.floor(Math.random() * MUSICS.length)].src} type="audio/mpeg" />
+			</audio>
+			<div className={'select-level'}>
+				Max-Level
+				<select onChange={(e) => {setMaxLevel(parseInt(e.target.value))}}>
+					{MAX_LEVELS.map((level, index) => <option key={index} value={level}>{level}</option>)}
+				</select>
+			</div>
+			{/*<div className={'select-music'}>*/}
+			{/*	Select Music*/}
+			{/*	<select onChange={(e) => {handlePlayClick(e.target.value)}}>*/}
+			{/*		{MUSICS.map((music, index) => <option key={index} value={music.src}>{music.name}</option>)}*/}
+			{/*	</select>*/}
+			{/*</div>*/}
+			<h1>Level {arrows.length}</h1>
 			<div className="arrow-container">
 				{arrows.map((arrow) => (
 					<Arrow
