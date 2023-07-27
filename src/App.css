@@ -83,4 +83,16 @@
 .arrow.active {
   background-image: linear-gradient(to right, #336225 0%, #498035 51%, #649f4e 100%);
   border: 2px solid #193a11;
+  animation: changeColor 0.3s linear;
+}
+@keyframes changeColor {
+  0% {
+    background-image:  linear-gradient(to right, #20568f 0%, #2a5e98 51%, #3a7cc7 100%);
+  }
+  30% {
+    background-image: linear-gradient(to right, #ffffff 0%, rgba(255, 255, 255, 0.85) 51%, rgba(255, 255, 255, 0.9) 100%);
+  }
+  90% {
+    background-image: linear-gradient(to right, #336225 0%, #498035 51%, #649f4e 100%);
+  }
 }
